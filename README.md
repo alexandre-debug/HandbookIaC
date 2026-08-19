@@ -9,6 +9,8 @@ console depois.
 
 Sem build, sem dependência, sem internet. É HTML + CSS + JavaScript puro.
 
+Feito por **[Alexandre Cardoso](https://www.linkedin.com/in/alexandre-cardoso-b47353184/)**.
+
 ## Como abrir
 
 ```bash

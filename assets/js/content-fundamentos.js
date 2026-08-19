@@ -15,6 +15,7 @@
         body: () => `
 <span class="eyebrow">Fundamentos · 01</span>
 <h1>Do ClickOps ao código</h1>
+${IAC.byline('autor deste handbook · conecte-se no LinkedIn')}
 <p class="lede">Você abre o console, cria o ECR, cria o secret, cria o target group, o auto scaling, vincula ao TG, sobe o load balancer, ajusta a policy. Funciona. O problema não é criar — é <b>recriar</b>, <b>revisar</b> e <b>lembrar</b>.</p>
 
 <h2>As quatro perguntas que o console não responde</h2>

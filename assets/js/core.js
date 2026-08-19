@@ -166,6 +166,23 @@ window.IAC = window.IAC || {};
       '</tbody></table>';
   }
 
+  /* ---------- autoria ---------- */
+  const AUTHOR = {
+    name: 'Alexandre Cardoso',
+    initials: 'AC',
+    url: 'https://www.linkedin.com/in/alexandre-cardoso-b47353184/'
+  };
+  const LI_PATH = 'M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 013.37-1.85c3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.07 2.07 0 110-4.13 2.07 2.07 0 010 4.13zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z';
+
+  /** Assinatura do autor, com link para o LinkedIn. */
+  function byline(sub) {
+    return '<div class="byline"><a href="' + AUTHOR.url + '" target="_blank" rel="noopener noreferrer">' +
+      '<span class="ava">' + AUTHOR.initials + '</span>' +
+      '<span><span class="bl-name">' + AUTHOR.name + '</span>' +
+      '<span class="bl-sub">' + (sub || 'Conecte-se no LinkedIn') + '</span></span>' +
+      '<svg viewBox="0 0 24 24" class="li" aria-hidden="true"><path d="' + LI_PATH + '"/></svg></a></div>';
+  }
+
   /* ---------- registry de seções/páginas ---------- */
   const sections = [];
   const pageIndex = {};   // path -> page
@@ -206,7 +223,7 @@ window.IAC = window.IAC || {};
 
   Object.assign(IAC, {
     $, $$, h, esc, slug, store, toast, copy, hl, code, getCode,
-    box, tip, warn, danger, info, consoleSteps, table,
+    box, tip, warn, danger, info, consoleSteps, table, byline, AUTHOR,
     section, sections, pageIndex, flat, isDone, toggleDone, doneSet,
     debounce, stripTags, download, canDownload, pad, rnd
   });
