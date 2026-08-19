@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handbook IaC — Terraform na AWS e no GCP</title>
+<meta name="description" content="Handbook interativo de Infraestrutura como Código com Terraform: do ClickOps ao código, com laboratório simulado de AWS e GCP.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237b42bc'/%3E%3Cpath d='M13 8l6 3.5v7L13 15V8z' fill='%23fff'/%3E%3Cpath d='M20 12l6 3.5v7l-6-3.5v-7z' fill='%23fff' opacity='.6'/%3E%3Cpath d='M13 16.5l6 3.5v7l-6-3.5v-7z' fill='%23fff' opacity='.85'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M13 6l7 4v8l-7-4V6z" fill="currentColor"/>
+          <path d="M21 10.5l7 4v8l-7-4v-8z" fill="currentColor" opacity=".55"/>
+          <path d="M13 15.5l7 4v8l-7-4v-8z" fill="currentColor" opacity=".8"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <strong>Handbook IaC</strong>
+        <span>Terraform · AWS · GCP</span>
+      </div>
+    </div>
+
+    <div class="side-search">
+      <svg viewBox="0 0 24 24" class="ico"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Buscar (/) recurso, comando, conceito…" autocomplete="off" spellcheck="false">
+    </div>
+
+    <nav id="nav" class="nav"></nav>
+
+    <div class="side-foot">
+      <button class="ghost-btn" id="themeBtn" title="Alternar tema">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+        <span>Tema</span>
+      </button>
+      <button class="ghost-btn" id="resetBtn" title="Limpar progresso e projeto salvo">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+        <span>Reset</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn only-mobile" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="crumb" id="crumb"></div>
+      <div class="spacer"></div>
+      <div class="progress-pill" id="progressPill" title="Páginas concluídas"></div>
+      <a class="icon-btn" id="prevBtn" title="Anterior">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M15 18l-6-6 6-6"/></svg>
+      </a>
+      <a class="icon-btn" id="nextBtn" title="Próximo">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </header>
+
+    <main id="view" class="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="palette" class="palette hidden">
+  <div class="palette-box">
+    <input id="paletteInput" type="text" placeholder="Ir para…" spellcheck="false">
+    <div id="paletteList" class="palette-list"></div>
+  </div>
+</div>
+
+<script src="assets/js/core.js"></script>
+<script src="assets/js/hcl.js"></script>
+<script src="assets/js/catalog-aws.js"></script>
+<script src="assets/js/catalog-gcp.js"></script>
+<script src="assets/js/content-fundamentos.js"></script>
+<script src="assets/js/content-aws.js"></script>
+<script src="assets/js/content-gcp.js"></script>
+<script src="assets/js/content-ref.js"></script>
+<script src="assets/js/lab.js"></script>
+<script src="assets/js/terminal.js"></script>
+<script src="assets/js/scenarios.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
