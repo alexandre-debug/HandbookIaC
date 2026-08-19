@@ -10,7 +10,7 @@
   function boot() {
     IAC.lab.load();
     flat = IAC.flat();
-    applyTheme(IAC.store.get('theme', 'dark'));
+    applyTheme(pickTheme());
     buildNav();
     window.addEventListener('hashchange', route);
     bindGlobal();
@@ -209,6 +209,18 @@
   }
 
   /* ---------------- tema ---------------- */
+  /** Escolha do usuário > tema já aplicado na página > preferência do sistema. */
+  function pickTheme() {
+    const saved = IAC.store.get('theme', null);
+    if (saved) return saved;
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    try {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+    } catch (e) { }
+    return 'dark';
+  }
+
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     IAC.store.set('theme', t);

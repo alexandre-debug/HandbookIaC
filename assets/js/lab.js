@@ -226,7 +226,7 @@ data "aws_subnets" "default" {
 (function (IAC) {
   'use strict';
   const $ = IAC.$, $$ = IAC.$$, esc = IAC.esc, H = IAC.hcl, L = IAC.lab;
-  let root = null, timer = null;
+  let root = null, timer = null, gen = 0;
 
   const TABS = [
     ['build', 'Recursos', '🧩'],
@@ -239,6 +239,7 @@ data "aws_subnets" "default" {
   ];
 
   function mount(view, cloud) {
+    gen++;
     if (timer) { clearInterval(timer); timer = null; }
     L.S.cloud = cloud;
     if (!L.S[cloud]) L.load();
@@ -384,7 +385,7 @@ data "aws_subnets" "default" {
     const A = L.assemble();
     if (!A.files.length) return '<div class="empty"><div class="big">📄</div>Nada para gerar ainda.</div>';
     let html = '<div class="toolbar"><button class="btn" data-act="copyall">📋 copiar tudo</button>' +
-      '<button class="btn" data-act="dlall">⬇ baixar arquivos</button>' +
+      (IAC.canDownload() ? '<button class="btn" data-act="dlall">⬇ baixar arquivos</button>' : '') +
       '<span class="chip">' + A.files.length + ' arquivos · ' + A.text.split('\n').length + ' linhas</span></div>';
     if (A.flags.missingSG.length) {
       html += IAC.warn('Referência pendente', 'O código aponta para um Security Group que não existe no projeto (<code>' +
@@ -521,6 +522,7 @@ data "aws_subnets" "default" {
         }
       }
     }
+    const myGen = ++gen;
     s.tab = 'apply'; L.save(); renderAll();
     const el = $('#applyOut'); if (!el) return;
     el.innerHTML = '';
@@ -529,7 +531,7 @@ data "aws_subnets" "default" {
     const speed = evs.length > 40 ? 45 : 90;
     if (timer) clearInterval(timer);
     timer = setInterval(() => {
-      if (!el.isConnected) { clearInterval(timer); timer = null; return; }
+      if (myGen !== gen || !el.isConnected) { clearInterval(timer); timer = null; return; }
       if (i >= evs.length) { clearInterval(timer); timer = null; s.applyTxt = el.innerHTML; L.save(); renderTop(); renderTabs(); return; }
       const e = evs[i++];
       if (e.t) { out += e.t; el.innerHTML = out; el.scrollTop = el.scrollHeight; }
@@ -657,6 +659,7 @@ data "aws_subnets" "default" {
   }
   function doInit() {
     const s = L.st();
+    const myGen = ++gen;
     s.initialized = true; L.save();
     s.tab = 'plan'; renderAll();
     const el = $('#labBody');
@@ -674,10 +677,10 @@ data "aws_subnets" "default" {
     if (timer) clearInterval(timer);
     timer = setInterval(() => {
       const out = $('#initOut');
-      if (!out) { clearInterval(timer); timer = null; return; }
+      if (myGen !== gen || !out) { clearInterval(timer); timer = null; return; }
       if (i >= lines.length) {
         clearInterval(timer); timer = null;
-        setTimeout(() => { if ($('#labBody')) renderBody(); }, 700);
+        setTimeout(() => { if (myGen === gen && $('#labBody')) renderBody(); }, 700);
         return;
       }
       buf += lines[i++]; out.innerHTML = buf;

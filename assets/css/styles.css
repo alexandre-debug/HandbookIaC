@@ -29,6 +29,17 @@
   --shadow:0 10px 30px rgba(0,0,0,.35);
   --sidebar-w:274px;
 }
+/* Se a página abrir sem escolha explícita, respeita o sistema. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:#f6f8fb; --bg-2:#eef2f7; --bg-3:#e6ecf4;
+    --panel:#ffffff; --panel-2:#f4f7fb;
+    --line:#dde5ef; --line-soft:#e8eef6;
+    --tx:#1a2230; --tx-2:#54637a; --tx-3:#8494a8;
+    --ok:#1a7f37; --warn:#9a6700; --err:#cf222e; --info:#0969da;
+    --shadow:0 10px 30px rgba(20,40,80,.10);
+  }
+}
 html[data-theme="light"]{
   --bg:#f6f8fb;
   --bg-2:#eef2f7;

@@ -75,11 +75,11 @@ window.IAC = window.IAC || {};
   function hlHcl(code) {
     const RE = new RegExp([
       '(#[^\\n]*|//[^\\n]*)',                                  // 1 comment
-      '("(?:[^"\\\\\\n]|\\\\.)*")',                            // 2 string
+      '(&quot;(?:[^&\\n]|&(?!quot;))*&quot;)',                     // 2 string (aspas já escapadas)
       '\\b([a-z_][a-z0-9_]*)\\s*(?=\\()',                      // 3 function
       '\\b(true|false|null)\\b',                               // 4 bool
       '\\b(\\d+(?:\\.\\d+)?)\\b',                              // 5 number
-      '^\\s*([a-z_][a-z0-9_]*)(?=\\s+"|\\s*\\{)',              // 6 block head
+      '^\\s*([a-z_][a-z0-9_]*)(?=\\s+&quot;|\\s*\\{)',              // 6 block head
       '\\b((?:aws|google|azurerm|random|tls|null|local|archive|kubernetes|helm)_[a-z0-9_]+)\\.([A-Za-z_][\\w-]*)', // 7,8 ref
       '\\b(var|local|module|data|each|count|path|terraform|self)\\.([A-Za-z_][\\w-]*)', // 9,10 ref2
       '^\\s*([A-Za-z_][\\w-]*)(?=\\s*=[^=])'                   // 11 attribute
@@ -190,7 +190,9 @@ window.IAC = window.IAC || {};
       toast('Baixado: ' + name);
     } catch (e) { copy(content, 'Download indisponível — conteúdo copiado'); }
   }
-  const canDownload = () => true;
+  /** O visualizador de artifacts roda em iframe sandbox e bloqueia downloads
+   *  iniciados pela página. Nesses casos oferecemos só "copiar". */
+  const canDownload = () => { try { return window.self === window.top; } catch (e) { return false; } };
   function pad(s, n) { s = String(s); while (s.length < n) s += ' '; return s; }
   function rnd(seedStr, len, alphabet) {
     // determinístico: mesmo nome -> mesmo "id" (evita ruído entre renders)
