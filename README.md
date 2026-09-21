@@ -1,6 +1,6 @@
 # Handbook IaC — Terraform na AWS e no GCP
 
-Handbook interativo de Infraestrutura como Código, em português, com um
+Handbook interativo de Infraestrutura como Código, em **inglês e português**, com um
 **laboratório que simula o que você faz hoje no console**: criar ECR, criar
 secret, criar target group, criar auto scaling, vincular ao TG, subir o load
 balancer, ajustar as policies — e ver o Terraform equivalente, o grafo de
@@ -8,6 +8,12 @@ dependências, o `plan`, o `apply` e até o *drift* de quando alguém mexe no
 console depois.
 
 Sem build, sem dependência, sem internet. É HTML + CSS + JavaScript puro.
+
+O site abre em **inglês** na primeira visita. O seletor no header permite
+alternar para **Português** e salva a preferência no navegador. A troca mantém
+o capítulo aberto, o progresso de leitura e os projetos dos laboratórios.
+As traduções também estão incluídas na versão em arquivo único; os exemplos
+de código mantêm seus identificadores e comentários originais.
 
 Feito por **[Alexandre Cardoso](https://www.linkedin.com/in/alexandre-cardoso-b47353184/)**.
 
@@ -75,6 +81,8 @@ assets/
   css/styles.css
   js/
     core.js                  # utilidades, realce de sintaxe, storage
+    i18n.js                  # idioma, tradução e renderização local
+    locales/en.js            # traduções em inglês e mensagens dinâmicas
     hcl.js                   # parser HCL, grafo, plan/apply, tfstate, lint
     catalog-aws.js           # 29 componentes AWS (console, HCL, pegadinhas, custo)
     catalog-gcp.js           # 18 componentes GCP
