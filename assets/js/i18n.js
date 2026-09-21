@@ -29,6 +29,8 @@
     for (const [pattern, replacement] of IAC.englishPatterns || []) {
       if (pattern.test(value)) return value.replace(pattern, replacement);
     }
+    const prefix = value.match(/^([^A-Za-zÀ-ÿ<]+)([A-Za-zÀ-ÿ].*)$/u);
+    if (prefix && translations().has(normalize(prefix[2]))) return prefix[1] + t(prefix[2]);
     return value;
   }
 
@@ -53,6 +55,8 @@
 
   function html(value) {
     if (language === 'pt-BR' || !value) return value;
+    const direct = translations().get(normalize(value));
+    if (direct !== undefined) return direct;
     const template = document.createElement('template');
     template.innerHTML = value;
     localize(template.content);

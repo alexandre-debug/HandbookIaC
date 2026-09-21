@@ -260,7 +260,7 @@
         '<span class="spacer"></span><button class="btn sm" data-reset-quiz>recomeçar</button></div>';
       html += '<div class="bar"><i style="width:' + Math.round(respondidas / Q.length * 100) + '%"></i></div>';
       Q.forEach((q, qi) => {
-        html += '<div class="qz"><div class="qt">' + (qi + 1) + '. ' + q[0] + '</div>';
+        html += '<div class="qz"><div class="qt">' + (qi + 1) + '. ' + IAC.html(q[0]) + '</div>';
         q[1].forEach((opt, oi) => {
           let cls = '';
           if (answers[qi] !== undefined) {
