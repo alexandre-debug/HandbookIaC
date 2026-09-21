@@ -8,6 +8,7 @@
 
   /* ---------------- boot ---------------- */
   function boot() {
+    updateLanguageUI();
     IAC.lab.load();
     flat = IAC.flat();
     applyTheme(pickTheme());
@@ -15,6 +16,31 @@
     window.addEventListener('hashchange', route);
     bindGlobal();
     route();
+  }
+
+  const shellText = [];
+  function updateLanguageUI() {
+    if (!shellText.length) {
+      document.querySelectorAll('.sidebar, .topbar, #paletteInput').forEach(root => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let node;
+        while ((node = walker.nextNode())) shellText.push({ node, text: node.nodeValue });
+        [root, ...root.querySelectorAll('*')].forEach(node => {
+          ['title', 'placeholder', 'aria-label'].forEach(attr => {
+            if (node.hasAttribute(attr)) shellText.push({ node, attr, text: node.getAttribute(attr) });
+          });
+        });
+      });
+    }
+    shellText.forEach(({ node, attr, text }) => {
+      if (attr) node.setAttribute(attr, IAC.t(text));
+      else node.nodeValue = IAC.t(text);
+    });
+    $('#languageLabel').textContent = IAC.language() === 'en' ? 'Language' : 'Idioma';
+    $('#languageSelect').value = IAC.language();
+    document.querySelector('meta[name="description"]').content = IAC.language() === 'en'
+      ? 'Interactive Infrastructure as Code handbook with Terraform: from ClickOps to code, with simulated AWS and GCP labs.'
+      : 'Handbook interativo de Infraestrutura como Código com Terraform: do ClickOps ao código, com laboratório simulado de AWS e GCP.';
   }
 
   /* ---------------- navegação ---------------- */
@@ -38,7 +64,7 @@
       });
       html += '</div></div>';
     });
-    nav.innerHTML = html;
+    nav.innerHTML = IAC.html(html);
     refreshNavState();
   }
 
@@ -51,7 +77,7 @@
     });
     const total = flat.filter(p => !p.mount).length;
     const d = Object.keys(done).length;
-    $('#progressPill').textContent = d + '/' + total + ' lidos';
+    $('#progressPill').textContent = IAC.t(d + '/' + total + ' lidos');
   }
 
   /* ---------------- router ---------------- */
@@ -76,12 +102,12 @@
     view.classList.remove('wide');
     view.scrollTop = 0;
     window.scrollTo(0, 0);
-    $('#crumb').innerHTML = '<b>' + esc(page.section.label) + '</b><span class="sep">›</span>' + esc(page.title);
+    $('#crumb').innerHTML = IAC.html('<b>' + esc(page.section.label) + '</b><span class="sep">›</span>' + esc(page.title));
     document.title = page.title + ' · Handbook IaC';
-    if (page.mount) { view.innerHTML = ''; page.mount(view); }
+    if (page.mount) { view.innerHTML = IAC.html(''); page.mount(view); }
     else {
       let html = '<div class="page">' + page.body() + markDone(path) + pager(path) + '</div>';
-      view.innerHTML = html;
+      view.innerHTML = IAC.html(html);
       buildToc();
     }
     refreshNavState();
@@ -118,7 +144,7 @@
     });
     h += '</div>';
     const lede = $('#view .lede') || $('#view h1');
-    if (lede) lede.insertAdjacentHTML('afterend', h);
+    if (lede) lede.insertAdjacentHTML('afterend', IAC.html(h));
   }
 
   /* ---------------- busca ---------------- */
@@ -135,8 +161,8 @@
       pair[1].forEach(d => {
         searchIndex.push({
           res: d, cloud: pair[0], path: pair[0] + '/lab',
-          txt: d.name + ' ' + d.tf + ' ' + IAC.stripTags(d.desc),
-          low: (d.name + ' ' + d.tf + ' ' + IAC.stripTags(d.desc)).toLowerCase()
+          txt: IAC.t(d.name) + ' ' + d.tf + ' ' + IAC.stripTags(IAC.html(d.desc)),
+          low: (IAC.t(d.name) + ' ' + d.tf + ' ' + IAC.stripTags(IAC.html(d.desc))).toLowerCase()
         });
       });
     });
@@ -179,8 +205,8 @@
       }
     });
     html += '</div>';
-    view.innerHTML = html;
-    $('#crumb').innerHTML = '<b>Busca</b><span class="sep">›</span>' + esc(q);
+    view.innerHTML = IAC.html(html);
+    $('#crumb').innerHTML = IAC.html('<b>Busca</b><span class="sep">›</span>' + esc(q));
   }
   function snippet(txt, term) {
     const i = txt.toLowerCase().indexOf(term);
@@ -202,10 +228,10 @@
     const list = $('#paletteList');
     const ql = q.toLowerCase();
     const items = flat.filter(p => !ql || (p.title + ' ' + p.section.label).toLowerCase().indexOf(ql) >= 0).slice(0, 12);
-    list.innerHTML = items.map((p, i) =>
+    list.innerHTML = IAC.html(items.map((p, i) =>
       '<div class="presult' + (i === 0 ? ' sel' : '') + '" data-go="' + p.section.id + '/' + p.id + '">' +
       '<span>' + esc(p.title) + '</span><span class="sec">' + esc(p.section.label) + '</span></div>').join('') ||
-      '<div class="presult"><span style="color:var(--tx-3)">nada encontrado</span></div>';
+      '<div class="presult"><span style="color:var(--tx-3)">nada encontrado</span></div>');
   }
 
   /* ---------------- tema ---------------- */
@@ -246,11 +272,11 @@
       if (md) {
         const on = IAC.toggleDone(md.getAttribute('data-done'));
         md.classList.toggle('done', on);
-        md.querySelector('span').textContent = on ? 'Capítulo concluído' : 'Marcar capítulo como lido';
+        md.querySelector('span').textContent = IAC.t(on ? 'Capítulo concluído' : 'Marcar capítulo como lido');
         md.querySelector('svg').style.color = on ? 'var(--ok)' : 'var(--tx-3)';
-        md.querySelector('svg').innerHTML = on
+        md.querySelector('svg').innerHTML = IAC.html(on
           ? '<path d="M22 11.1V12a10 10 0 11-5.9-9.1"/><path d="M22 4L12 14.1l-3-3"/>'
-          : '<circle cx="12" cy="12" r="9"/>';
+          : '<circle cx="12" cy="12" r="9"/>');
         refreshNavState(); return;
       }
 
@@ -270,13 +296,24 @@
         return;
       }
       if (e.target.closest('#resetBtn')) {
-        if (!confirm('Apagar progresso de leitura, projetos do laboratório e preferências?')) return;
+        if (!confirm(IAC.t('Apagar progresso de leitura, projetos do laboratório e preferências?'))) return;
         ['done', 'lab.aws', 'lab.gcp', 'navCollapsed'].forEach(k => IAC.store.del(k));
         IAC.lab.load(); location.reload(); return;
       }
       if (e.target.closest('#menuBtn')) { $('#sidebar').classList.toggle('open'); return; }
       if (e.target === $('#palette')) { closePalette(); return; }
       if (e.target.closest('.sidebar') === null && $('#sidebar').classList.contains('open') && !e.target.closest('#menuBtn')) closeSidebar();
+    });
+
+    $('#languageSelect').addEventListener('change', function () {
+      const query = $('#q').value.trim();
+      IAC.setLanguage(this.value);
+      searchIndex = null;
+      updateLanguageUI();
+      buildNav();
+      closePalette();
+      route();
+      if (query) { $('#q').value = query; doSearch(query); }
     });
 
     $('#prevBtn').addEventListener('click', () => step(-1));

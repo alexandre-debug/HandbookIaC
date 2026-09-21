@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -66,6 +66,13 @@
       </button>
       <div class="crumb" id="crumb"></div>
       <div class="spacer"></div>
+      <label class="language-control">
+        <span class="sr-only" id="languageLabel">Language</span>
+        <select id="languageSelect" aria-labelledby="languageLabel">
+          <option value="en" lang="en">English</option>
+          <option value="pt-BR" lang="pt-BR">Português</option>
+        </select>
+      </label>
       <div class="progress-pill" id="progressPill" title="Páginas concluídas"></div>
       <a class="icon-btn" id="prevBtn" title="Anterior">
         <svg viewBox="0 0 24 24" class="ico"><path d="M15 18l-6-6 6-6"/></svg>
@@ -88,6 +95,8 @@
 </div>
 
 <script src="assets/js/core.js"></script>
+<script src="assets/js/locales/en.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/hcl.js"></script>
 <script src="assets/js/catalog-aws.js"></script>
 <script src="assets/js/catalog-gcp.js"></script>

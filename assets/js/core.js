@@ -15,7 +15,7 @@ window.IAC = window.IAC || {};
       else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]);
       else if (attrs[k] != null) e.setAttribute(k, attrs[k]);
     }
-    if (html != null) e.innerHTML = html;
+    if (html != null) e.innerHTML = IAC.html(html);
     return e;
   }
   const esc = s => String(s == null ? '' : s)
@@ -42,7 +42,7 @@ window.IAC = window.IAC || {};
   let toastT;
   function toast(msg) {
     const t = $('#toast'); if (!t) return;
-    t.textContent = msg; t.classList.add('show');
+    t.textContent = IAC.t(msg); t.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2100);
   }
   function copy(text, label) {

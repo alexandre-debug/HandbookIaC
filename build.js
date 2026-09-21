@@ -23,7 +23,7 @@ const head = index.slice(0, index.indexOf('</head>'))
   .replace(/^[\s\S]*?<head>/, '');
 
 const out = `<!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+${index.match(/<html[^>]*>/)[0]}
 <head>${head}
 <style>
 ${css}

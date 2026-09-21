@@ -251,7 +251,7 @@ data "aws_subnets" "default" {
     }
     view.classList.add('wide');
     view.innerHTML =
-      '<div class="page full">' +
+      IAC.html('<div class="page full">' +
       '<span class="eyebrow ' + cloud + '">Laboratório</span>' +
       '<h1>' + (cloud === 'aws' ? 'Monte sua infraestrutura AWS' : 'Monte sua infraestrutura GCP') + '</h1>' +
       '<p class="lede">Clique nos componentes à esquerda como você clicaria no console. O Terraform correspondente, o grafo de dependências, o <code>plan</code> e o <code>apply</code> aparecem do lado direito — inclusive o drift de quando alguém mexe no console depois.</p>' +
@@ -261,7 +261,7 @@ data "aws_subnets" "default" {
       '<span class="spacer"></span><span id="cntSel" class="chip"></span></div>' +
       '<div class="lab-side-body" id="labSide"></div></aside>' +
       '<div class="lab-main"><div class="lab-tabs" id="labTabs"></div><div class="lab-body" id="labBody"></div></div>' +
-      '</div></div>';
+      '</div></div>');
     root = view;
     bind();
     renderAll();
@@ -278,7 +278,7 @@ data "aws_subnets" "default" {
     const applied = Object.keys(s.applied).length;
     const drifted = Object.keys(s.drift).length;
     $('#labTop').innerHTML =
-      '<div class="toolbar">' +
+      IAC.html('<div class="toolbar">' +
       '<button class="btn pri" data-act="plan">▶ terraform plan</button>' +
       '<button class="btn ok" data-act="apply">🚀 terraform apply</button>' +
       '<button class="btn dgr" data-act="destroy"' + (applied ? '' : ' disabled') + '>💥 destroy</button>' +
@@ -289,7 +289,7 @@ data "aws_subnets" "default" {
       (drifted ? '<span class="chip warn">' + drifted + ' com drift</span>' : '') +
       '<span class="chip info" title="Estimativa grosseira, só para dar noção de ordem de grandeza">≈ US$ ' + cost.total.toFixed(0) + '/mês</span>' +
       '<button class="btn sm" data-act="clear">limpar projeto</button>' +
-      '</div>';
+      '</div>');
   }
 
   /* ---------- catálogo ---------- */
@@ -311,28 +311,28 @@ data "aws_subnets" "default" {
       });
       html += '</div></div>';
     });
-    $('#labSide').innerHTML = html;
-    $('#cntSel').textContent = s.items.length + ' no projeto';
+    $('#labSide').innerHTML = IAC.html(html);
+    $('#cntSel').textContent = IAC.t(s.items.length + ' no projeto');
   }
 
   /* ---------- abas ---------- */
   function renderTabs() {
     const s = L.st();
-    $('#labTabs').innerHTML = TABS.map(t =>
+    $('#labTabs').innerHTML = IAC.html(TABS.map(t =>
       '<button class="tab' + (s.tab === t[0] ? ' active' : '') + '" data-tab="' + t[0] + '">' + t[2] + ' ' + t[1] + '</button>'
-    ).join('');
+    ).join(''));
   }
 
   function renderBody() {
     const s = L.st(), body = $('#labBody');
     body.className = 'lab-body' + (s.tab === 'term' ? ' pad0' : '');
-    if (s.tab === 'build') body.innerHTML = viewBuild();
-    else if (s.tab === 'code') body.innerHTML = viewCode();
-    else if (s.tab === 'graph') body.innerHTML = L.diagram(L.assemble().blocks);
-    else if (s.tab === 'plan') body.innerHTML = viewPlan();
-    else if (s.tab === 'apply') body.innerHTML = viewApply();
-    else if (s.tab === 'checks') body.innerHTML = viewChecks();
-    else if (s.tab === 'term') { body.innerHTML = ''; IAC.term.render(body); }
+    if (s.tab === 'build') body.innerHTML = IAC.html(viewBuild());
+    else if (s.tab === 'code') body.innerHTML = IAC.html(viewCode());
+    else if (s.tab === 'graph') body.innerHTML = IAC.html(L.diagram(L.assemble().blocks));
+    else if (s.tab === 'plan') body.innerHTML = IAC.html(viewPlan());
+    else if (s.tab === 'apply') body.innerHTML = IAC.html(viewApply());
+    else if (s.tab === 'checks') body.innerHTML = IAC.html(viewChecks());
+    else if (s.tab === 'term') { body.innerHTML = IAC.html(''); IAC.term.render(body); }
   }
 
   /* ---------- aba Recursos ---------- */
@@ -525,7 +525,7 @@ data "aws_subnets" "default" {
     const myGen = ++gen;
     s.tab = 'apply'; L.save(); renderAll();
     const el = $('#applyOut'); if (!el) return;
-    el.innerHTML = '';
+    el.innerHTML = IAC.html('');
     let i = 0;
     // projetos grandes rodam mais rápido para o apply não virar tédio
     const speed = evs.length > 40 ? 45 : 90;
@@ -534,7 +534,7 @@ data "aws_subnets" "default" {
       if (myGen !== gen || !el.isConnected) { clearInterval(timer); timer = null; return; }
       if (i >= evs.length) { clearInterval(timer); timer = null; s.applyTxt = el.innerHTML; L.save(); renderTop(); renderTabs(); return; }
       const e = evs[i++];
-      if (e.t) { out += e.t; el.innerHTML = out; el.scrollTop = el.scrollHeight; }
+      if (e.t) { out += e.t; el.innerHTML = IAC.html(out); el.scrollTop = el.scrollHeight; }
       if (e.done) e.done();
     }, speed);
   }
@@ -581,11 +581,11 @@ data "aws_subnets" "default" {
     s.drift[pick.addr][pick.key] = { real: pick.real, want: pick.want };
     s.tab = 'plan'; L.save(); renderAll();
     const top = $('#labTop');
-    top.insertAdjacentHTML('afterend', IAC.danger('O que aconteceu no console',
+    top.insertAdjacentHTML('afterend', IAC.html(IAC.danger('O que aconteceu no console',
       '<p>' + pick.story + '</p><p>Agora <code>' + esc(pick.addr) + '.' + esc(pick.key) + '</code> está <code>' + esc(pick.real) +
       '</code> na AWS/GCP, mas o código diz <code>' + esc(pick.want) + '</code>. Veja o <code>plan</code> abaixo: o Terraform quer <b>desfazer</b> a mudança manual.</p>' +
       '<p><b>Suas opções:</b> (1) <code>apply</code> e o código vence; (2) trazer a mudança para o código; (3) <code>lifecycle { ignore_changes = [' +
-      esc(pick.key) + '] }</code> se aquele campo é gerenciado por fora de propósito.</p>'));
+      esc(pick.key) + '] }</code> se aquele campo é gerenciado por fora de propósito.</p>')));
   }
 
   /* ---------- eventos ---------- */
@@ -626,10 +626,10 @@ data "aws_subnets" "default" {
       if (a === 'plan') { if (!s.initialized) { doInit(); return; } s.tab = 'plan'; L.save(); renderAll(); }
       else if (a === 'init') doInit();
       else if (a === 'apply') runApply(false);
-      else if (a === 'destroy') { if (confirm('terraform destroy — apagar tudo do state simulado?')) runApply(true); }
+      else if (a === 'destroy') { if (confirm(IAC.t('terraform destroy — apagar tudo do state simulado?'))) runApply(true); }
       else if (a === 'drift') makeDrift();
       else if (a === 'clear') {
-        if (!confirm('Limpar o projeto inteiro?')) return;
+        if (!confirm(IAC.t('Limpar o projeto inteiro?'))) return;
         L.S[L.S.cloud] = L.blank(L.S.cloud); L.save(); mount(root, L.S.cloud);
       }
       else if (a === 'copyall') { IAC.copy(L.assemble().files.map(f => '# ===== ' + f.name + ' =====\n' + f.text).join('\n\n'), 'Projeto copiado'); }
@@ -639,9 +639,9 @@ data "aws_subnets" "default" {
       }
       else if (a === 'showstate') {
         const A = L.assemble();
-        $('#labBody').innerHTML = '<div class="toolbar"><button class="btn" data-tab="apply">← voltar</button>' +
+        $('#labBody').innerHTML = IAC.html('<div class="toolbar"><button class="btn" data-tab="apply">← voltar</button>' +
           '<span class="chip warn">o state guarda valores sensíveis em texto claro</span></div>' +
-          IAC.code(H.tfstate(A.blocks, s.applied, s.serial), { lang: 'json', file: 'terraform.tfstate' });
+          IAC.code(H.tfstate(A.blocks, s.applied, s.serial), { lang: 'json', file: 'terraform.tfstate' }));
       }
     });
     root.addEventListener('change', onInput);
@@ -663,7 +663,7 @@ data "aws_subnets" "default" {
     s.initialized = true; L.save();
     s.tab = 'plan'; renderAll();
     const el = $('#labBody');
-    el.innerHTML = '<div class="term-out" id="initOut"></div>';
+    el.innerHTML = IAC.html('<div class="term-out" id="initOut"></div>');
     const lines = [
       '<span class="o-b">Initializing the backend...</span>\n',
       '<span class="o-b">Initializing provider plugins...</span>\n',
@@ -683,7 +683,7 @@ data "aws_subnets" "default" {
         setTimeout(() => { if (myGen === gen && $('#labBody')) renderBody(); }, 700);
         return;
       }
-      buf += lines[i++]; out.innerHTML = buf;
+      buf += lines[i++]; out.innerHTML = IAC.html(buf);
     }, 260);
   }
 

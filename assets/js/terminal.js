@@ -15,11 +15,11 @@
 
   function render(el) {
     el.innerHTML =
-      '<div class="term"><div class="term-h">' +
+      IAC.html('<div class="term"><div class="term-h">' +
       '<span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>' +
       '<span class="t">~/infra/' + (IAC.lab.S.cloud) + '-prod</span></div>' +
       '<div class="term-scroll" id="termOut"></div>' +
-      '<div class="term-in"><span>$</span><input id="termIn" autocomplete="off" spellcheck="false" placeholder="terraform plan"></div></div>';
+      '<div class="term-in"><span>$</span><input id="termIn" autocomplete="off" spellcheck="false" placeholder="terraform plan"></div></div>');
     box = el; out = $('#termOut'); input = $('#termIn');
     write(BANNER + '\n');
     input.addEventListener('keydown', onKey);
@@ -29,7 +29,7 @@
 
   function write(html) {
     const d = document.createElement('div');
-    d.className = 'term-line'; d.innerHTML = html;
+    d.className = 'term-line'; d.innerHTML = IAC.html(html);
     out.appendChild(d); out.scrollTop = out.scrollHeight;
   }
   function echo(cmd) { write('<span class="o-add">$</span> ' + esc(cmd)); }
@@ -53,7 +53,7 @@
   function run(cmd) {
     const parts = cmd.split(/\s+/);
     const c0 = parts[0];
-    if (c0 === 'clear' || c0 === 'cls') { out.innerHTML = ''; return; }
+    if (c0 === 'clear' || c0 === 'cls') { out.innerHTML = IAC.html(''); return; }
     if (c0 === 'help' || c0 === '?') return help();
     if (c0 === 'ls') return write(A().files.map(f => '<span class="o-cy">' + f.name + '</span>').join('   ') + '   .terraform/   ' + (s().initialized ? '.terraform.lock.hcl' : ''));
     if (c0 === 'cat') {

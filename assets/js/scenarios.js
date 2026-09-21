@@ -180,12 +180,12 @@
         html += IAC.tip('Como usar este roteiro',
           'Você pode <b>montar tudo de uma vez</b> para ver o resultado final, ou ir ao laboratório e adicionar componente por componente — os passos acima marcam sozinhos conforme você avança. A segunda forma ensina mais.');
         html += '</div>';
-        view.innerHTML = html;
+        view.innerHTML = IAC.html(html);
       }
     };
   }
 
-  const pages = SC.map(sc => ({ id: sc.id, title: sc.title.length > 42 ? sc.em + ' ' + sc.title.slice(0, 40) + '…' : sc.em + ' ' + sc.title, tag: 'lab', mount: scenarioPage(sc) }));
+  const pages = SC.map(sc => ({ id: sc.id, title: sc.em + ' ' + sc.title, tag: 'lab', mount: scenarioPage(sc) }));
 
   /* ---------------- quiz ---------------- */
   const Q = [
@@ -274,7 +274,7 @@
         html += '</div>';
       });
       html += '</div>';
-      view.innerHTML = html;
+      view.innerHTML = IAC.html(html);
     }
   }
 
