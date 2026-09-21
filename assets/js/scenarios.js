@@ -236,9 +236,10 @@
       'É o package-lock do Terraform. Sem ele comitado, sua máquina e o CI podem usar versões diferentes de provider e produzir planos diferentes.']
   ];
 
+  // Keep answers when the current page is remounted after a language change.
+  const answers = {};
   function quizPage(view) {
     view.classList.remove('wide');
-    const answers = {};
     render();
     view.addEventListener('click', function (e) {
       const o = e.target.closest('[data-q]');

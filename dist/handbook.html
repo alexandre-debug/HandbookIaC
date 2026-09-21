@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Handbook IaC — Terraform na AWS e no GCP</title>
-<meta name="description" content="Handbook interativo de Infraestrutura como Código com Terraform: do ClickOps ao código, com laboratório simulado de AWS e GCP.">
+<title>Handbook IaC — Terraform on AWS and GCP</title>
+<meta name="description" content="Interactive Infrastructure as Code handbook with Terraform: from ClickOps to code, with simulated AWS and GCP labs.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237b42bc'/%3E%3Cpath d='M13 8l6 3.5v7L13 15V8z' fill='%23fff'/%3E%3Cpath d='M20 12l6 3.5v7l-6-3.5v-7z' fill='%23fff' opacity='.6'/%3E%3Cpath d='M13 16.5l6 3.5v7l-6-3.5v-7z' fill='%23fff' opacity='.85'/%3E%3C/svg%3E">
 
 <style>
@@ -2859,7 +2859,12 @@ window.IAC.english = {
   "Service Account com papel roles/owner ou roles/editor.": "Service Account has roles/owner or roles/editor.",
   "Papéis básicos são amplos demais. Use papéis predefinidos específicos (ex.: roles/secretmanager.secretAccessor).": "Basic roles are too broad. Use specific predefined roles such as roles/secretmanager.secretAccessor.",
   "Recurso com estado (banco/bucket) sem lifecycle { prevent_destroy = true }.": "Stateful resource (database/bucket) without lifecycle { prevent_destroy = true }.",
-  "Uma linha que já salvou muita gente de um terraform destroy no diretório errado.": "A one-line safeguard against an accidental terraform destroy in the wrong directory."
+  "Uma linha que já salvou muita gente de um terraform destroy no diretório errado.": "A one-line safeguard against an accidental terraform destroy in the wrong directory.",
+  "user_data.sh.tftpl — o bootstrap da instância": "user_data.sh.tftpl — instance bootstrap",
+  "Publicando a primeira imagem": "Publishing the first image",
+  "Injetando o valor real (fora do Terraform)": "Injecting the real value (outside Terraform)",
+  "Injetando o valor real": "Injecting the real value",
+  "Push da imagem": "Pushing the image"
 };
 // Dynamic application messages. Values (names, counts and queries) stay intact.
 window.IAC.englishPatterns = [
@@ -12215,9 +12220,10 @@ data "aws_subnets" "default" {
       'É o package-lock do Terraform. Sem ele comitado, sua máquina e o CI podem usar versões diferentes de provider e produzir planos diferentes.']
   ];
 
+  // Keep answers when the current page is remounted after a language change.
+  const answers = {};
   function quizPage(view) {
     view.classList.remove('wide');
-    const answers = {};
     render();
     view.addEventListener('click', function (e) {
       const o = e.target.closest('[data-q]');

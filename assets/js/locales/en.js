@@ -2045,7 +2045,12 @@ window.IAC.english = {
   "Service Account com papel roles/owner ou roles/editor.": "Service Account has roles/owner or roles/editor.",
   "Papéis básicos são amplos demais. Use papéis predefinidos específicos (ex.: roles/secretmanager.secretAccessor).": "Basic roles are too broad. Use specific predefined roles such as roles/secretmanager.secretAccessor.",
   "Recurso com estado (banco/bucket) sem lifecycle { prevent_destroy = true }.": "Stateful resource (database/bucket) without lifecycle { prevent_destroy = true }.",
-  "Uma linha que já salvou muita gente de um terraform destroy no diretório errado.": "A one-line safeguard against an accidental terraform destroy in the wrong directory."
+  "Uma linha que já salvou muita gente de um terraform destroy no diretório errado.": "A one-line safeguard against an accidental terraform destroy in the wrong directory.",
+  "user_data.sh.tftpl — o bootstrap da instância": "user_data.sh.tftpl — instance bootstrap",
+  "Publicando a primeira imagem": "Publishing the first image",
+  "Injetando o valor real (fora do Terraform)": "Injecting the real value (outside Terraform)",
+  "Injetando o valor real": "Injecting the real value",
+  "Push da imagem": "Pushing the image"
 };
 // Dynamic application messages. Values (names, counts and queries) stay intact.
 window.IAC.englishPatterns = [
